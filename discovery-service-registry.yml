@@ -1,0 +1,9 @@
+info.description: discovery service registry (eureka server)
+
+server.port: 8761
+
+eureka:
+  datacenter: spring cloud datacenter
+  client:
+    register-with-eureka: false
+    fetch-registry: false

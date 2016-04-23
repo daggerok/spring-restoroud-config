@@ -1,0 +1,13 @@
+info.description: auth server
+
+server:
+  context-path: /uaa
+  port: 8000
+
+security:
+  user.password: password
+  oauth2.client:
+    clientId: service
+    clientSecret: service
+    authorized-grant-types: authorization_code,refresh_token,password
+    scope: openid

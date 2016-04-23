@@ -1,0 +1,79 @@
+info.description: general description
+
+server.port: 0
+
+management.context-path: /admin
+
+http.mappers.json-pretty-print: true
+
+facebook:
+  client:
+    client-id: 1357459827613700
+    client-secret: 6a07be77455f07cdc9345368955a9e5f
+    access-token-uri: https://graph.facebook.com/oauth/access_token
+    user-authorization-uri: https://www.facebook.com/dialog/oauth
+    token-name: oauth_token
+    authentication-scheme: query
+    client-authentication-scheme: form
+  resource:
+    user-info-uri: https://graph.facebook.com/me
+
+security:
+  basic:
+    enabled: false
+  oauth2:
+    client:
+      client-id: auth
+      client-secret: htua
+      scope: read,write
+      auto-approve-scopes: '.*'
+      access-token-uri: http://${DOCKER_HOST:localhost}:8000/uaa/oauth/token
+      user-authorization-uri: http://${DOCKER_HOST:localhost}:8000/uaa/oauth/authorize
+    resource:
+      user-info-uri: http://${DOCKER_HOST:localhost}:8000/uaa/me
+
+spring:
+  resources.chain.enabled: true
+  cloud.config.discovery.enabled: true
+  jpa.hibernate.ddl-auto: update
+  data.rest.base-path: /api
+
+endpoints:
+  health.sensitive: false
+  restart.enabled: true
+  shutdown.enabled: true
+
+eureka:
+  environment: Staging
+
+  server:
+    registry-sync-retry-wait-ms: 1000
+    a-sgcache-expiry-timeout-ms: 20000
+    eviction-interval-timer-in-ms: 10000
+    peer-eureka-nodes-update-interval-ms: 3000
+    renewal-threshold-update-interval-ms: 60000
+
+  client:
+    healthcheck.enabled: true
+    service-url.default-zone: ${DISCOVERY_SERVICE_URL:http://${DOCKER_HOST:localhost}:${DISCOVERY_SERVICE_PORT:8761}/eureka/}
+    prefer-same-zone-eureka: true
+
+  instance:
+    appname: ${spring.application.name}
+    instance-id: ${spring.application.name}-${spring.cloud.client.ipAddress}-${INSTANCE_ID:${random.value}}
+    status-page-url-path: ${management.context-path}/info
+    health-check-url-path: ${management.context-path}/health
+    prefer-ip-address: true
+
+  refresh.interval: 1
+  app-info.replace.interval: 1
+  app-info.initial.replace.time: 2
+
+ribbon:
+  ServerListRefreshInterval: 1000
+  ConnectTimeout: 3000
+  ReadTimeout: 60000
+
+hystrix.command.default.execution.isolation.thread.timeout-in-milliseconds: 60000
+
+logging.level.com.netflix.discovery: 'OFF'
