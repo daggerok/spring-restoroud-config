@@ -2,7 +2,7 @@ info.description: general description
 
 server.port: 0
 
-management.context-path: /admin
+management.context-path: /actuator
 
 http.mappers.json-pretty-print: true
 
@@ -33,6 +33,7 @@ security:
       user-info-uri: http://${DOCKER_HOST:localhost}:8000/uaa/me
 
 spring:
+  output.ansi.enabled: always
   resources.chain.enabled: true
   cloud.config.discovery.enabled: true
   jpa.hibernate.ddl-auto: update
